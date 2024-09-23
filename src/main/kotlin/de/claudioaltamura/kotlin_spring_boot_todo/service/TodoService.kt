@@ -1,6 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.service
 
-import de.claudioaltamura.kotlin_spring_boot_todo.controller.Todo
+import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
+import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -9,6 +10,11 @@ class TodoService {
 
     @Value("\${description}")
     lateinit var description : String
+
+    fun addTodo(newTodo: NewTodo): Todo {
+        //TODO persist
+        return Todo(1L, newTodo.title, newTodo.description)
+    }
 
     fun getTodo(id: Long): Todo {
         return Todo(id, "first todo", description)

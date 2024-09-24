@@ -12,6 +12,11 @@ GET
     curl -i http://localhost:8080/todos/1
 ```
 
+GET
+```
+    curl -i 'http://localhost:8080/todos?page=0&size=10'
+```
+
 POST
 ```
     curl -i \

@@ -16,7 +16,13 @@ class TodoService {
         return Todo(1L, newTodo.title, newTodo.description)
     }
 
+    fun getTodos(page: Int, size: Int): List<Todo> {
+        //TODO limit result
+        return listOf(Todo(1, "first todo", description))
+    }
+
     fun getTodo(id: Long): Todo {
+        //TODO find by id
         return Todo(id, "first todo", description)
     }
 

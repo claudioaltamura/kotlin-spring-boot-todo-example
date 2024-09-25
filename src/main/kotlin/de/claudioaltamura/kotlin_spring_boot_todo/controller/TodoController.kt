@@ -5,6 +5,7 @@ import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
 import jakarta.validation.Valid
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -35,4 +36,21 @@ class TodoController(val todoService: TodoService) {
         logger.info { "get todo for '${id}'" }
         return ResponseEntity.ok(todoService.getTodo(id))
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateTodo(@RequestBody todo: Todo,
+                     @PathVariable("id") id : Int) {
+        logger.info { "update todo '${id}', '${todo}'" }
+        todoService.updateTodo(id, todo)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteTodo(@PathVariable("id") id : Int){
+        logger.info { "delete todo '${id}'" }
+        todoService.deleteTodo(id)
+    }
+
+
 }

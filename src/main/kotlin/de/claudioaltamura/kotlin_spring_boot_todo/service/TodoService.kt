@@ -26,4 +26,12 @@ class TodoService {
         return Todo(id, "first todo", description)
     }
 
+    fun updateTodo(id: Int, todo: Todo) {
+        //TODO update
+    }
+
+    fun deleteTodo(id: Int) {
+        //TODO update
+    }
+
 }

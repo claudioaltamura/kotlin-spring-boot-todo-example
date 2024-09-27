@@ -1,3 +1,13 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.dto
 
-data class Todo(val id: Long, val title: String, val description: String)
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+
+data class Todo(
+    @get:NotNull(message = "todo.id must not be null")
+    val id: Long,
+    @get:NotBlank(message = "todo.title must not be blank")
+    val title: String,
+    @get:NotBlank(message = "todo.description must not be blank")
+    val description: String
+)

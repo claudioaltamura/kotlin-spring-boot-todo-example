@@ -32,7 +32,7 @@ class TodoController(val todoService: TodoService) {
     }
 
     @GetMapping("/{id}")
-    fun getTodo(@Valid @PathVariable("id") id: Long) : ResponseEntity<Todo> {
+    fun getTodo(@PathVariable("id") id: Long) : ResponseEntity<Todo> {
         logger.info { "get todo for '${id}'" }
         return ResponseEntity.ok(todoService.getTodo(id))
     }
@@ -51,6 +51,5 @@ class TodoController(val todoService: TodoService) {
         logger.info { "delete todo '${id}'" }
         todoService.deleteTodo(id)
     }
-
 
 }

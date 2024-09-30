@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository
 interface TodoRepository : CrudRepository<TodoEntity, Int> {
 
     @Query(value = "SELECT * FROM TODOS WHERE title like %?1%", nativeQuery = true)
-    fun findByTodoTitle(title : String) : List<TodoEntity>
+    fun findByTitle(title : String) : List<TodoEntity>
 
 }

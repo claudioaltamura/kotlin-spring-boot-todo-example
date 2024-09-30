@@ -27,9 +27,9 @@ class TodoController(val todoService: TodoService) {
     }
 
     @GetMapping
-    fun getTodos(@RequestParam(defaultValue = "0") @Min(value = 0) page: Int, @RequestParam(defaultValue = "10") @Min(value = 0) size: Int) : ResponseEntity<List<Todo>> {
-        logger.info { "get todos: '${page}', '${size}'" }
-        return ResponseEntity.ok(todoService.getTodos(page, size))
+    fun getTodos(@RequestParam("title") title: String) : ResponseEntity<List<Todo>> {
+        logger.info { "get todos by title: '${title}'" }
+        return ResponseEntity.ok(todoService.getTodos(title))
     }
 
     @GetMapping("/{id}")

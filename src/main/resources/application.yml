@@ -1,4 +1,3 @@
-description: this is the first todo
 management:
   endpoints:
     web:

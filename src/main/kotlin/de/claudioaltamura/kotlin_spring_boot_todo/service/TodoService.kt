@@ -5,17 +5,12 @@ import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 private val logger = KotlinLogging.logger {}
 
 @Service
 class TodoService(val todoRepository: TodoRepository) {
-
-    //TODO Remove value
-    @Value("\${description}")
-    lateinit var description : String
 
     fun addTodo(newTodo: NewTodo): Todo {
         val todoEntity = newTodo.let {
@@ -28,14 +23,19 @@ class TodoService(val todoRepository: TodoRepository) {
         }
     }
 
-    fun getTodos(page: Int, size: Int): List<Todo> {
-        //TODO limit result
-        return listOf(Todo(1, "first todo", description))
+    fun getTodos(title: String?): List<Todo> {
+        val todos = title?.let {
+            todoRepository.findByTitle(title);
+        } ?: todoRepository.findAll()
+
+        return todos.map {
+            it.id?.let { it1 -> Todo(it1, it.title, it.description) }!!
+        }
     }
 
     fun getTodo(id: Int): Todo {
         //TODO find by id
-        return Todo(id, "first todo", description)
+        return Todo(id, "first todo", "description")
     }
 
     fun updateTodo(id: Int, todo: Todo) {

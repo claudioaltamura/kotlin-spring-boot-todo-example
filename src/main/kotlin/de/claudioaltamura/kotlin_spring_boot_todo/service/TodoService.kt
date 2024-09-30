@@ -25,7 +25,7 @@ class TodoService(val todoRepository: TodoRepository) {
 
     fun getTodos(title: String?): List<Todo> {
         val todos = title?.let {
-            todoRepository.findByTitle(title);
+            todoRepository.findByTitle(title)
         } ?: todoRepository.findAll()
 
         return todos.map {

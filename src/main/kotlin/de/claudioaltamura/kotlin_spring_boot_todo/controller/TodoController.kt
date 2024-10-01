@@ -39,10 +39,9 @@ class TodoController(val todoService: TodoService) {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun updateTodo(@RequestBody @Valid todo: Todo, @PathVariable("id") @Min(value = 0)  id : Int) {
+    fun updateTodo(@RequestBody @Valid todo: Todo, @PathVariable("id") @Min(value = 0)  id : Int)  : ResponseEntity<Todo> {
         logger.info { "update todo '${id}', '${todo}'" }
-        todoService.updateTodo(id, todo)
+        return ResponseEntity.ok(todoService.updateTodo(id, todo))
     }
 
     @DeleteMapping("/{id}")

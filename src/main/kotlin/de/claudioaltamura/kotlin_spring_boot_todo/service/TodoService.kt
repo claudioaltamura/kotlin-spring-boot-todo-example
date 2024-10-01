@@ -47,8 +47,20 @@ class TodoService(val todoRepository: TodoRepository) {
         }
     }
 
-    fun updateTodo(id: Int, todo: Todo) {
-        //TODO update
+    fun updateTodo(id: Int, todo: Todo): Todo {
+        val existingTodo = todoRepository.findById(id)
+
+        return if (existingTodo.isPresent) {
+            existingTodo.get()
+                .let {
+                    it.title = todo.title
+                    it.description = todo.description
+                    todoRepository.save(it)
+                    Todo(it.id!!, it.title, it.description)
+                }
+        } else {
+            throw TodoNotFoundException("no todo found for the id '$id'")
+        }
     }
 
     fun deleteTodo(id: Int) {

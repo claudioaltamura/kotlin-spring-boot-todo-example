@@ -24,3 +24,18 @@ POST
     -H "Content-Type: application/json" \
     -X POST http://localhost:8080/todos
 ```
+
+PUT
+```
+    curl -i \
+    -d '{"id": 1, "title":"a todo", "description": "but a better description"}' \
+    -H "Content-Type: application/json" \
+    -X PUT http://localhost:8080/todos/1
+```
+
+DELETE
+```
+    curl -i \
+    -H "Content-Type: application/json" \
+    -X DELETE http://localhost:8080/todos/1
+```

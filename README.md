@@ -39,3 +39,9 @@ DELETE
     -H "Content-Type: application/json" \
     -X DELETE http://localhost:8080/todos/1
 ```
+
+## H2
+
+```
+    http://localhost:8080/h2-console
+```

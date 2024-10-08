@@ -1,32 +1,37 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
-import com.ninjasquad.springmockk.MockkBean
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
-import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
-import io.mockk.every
-import io.mockk.verify
+import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
+import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
 
-@WebMvcTest(TodoController::class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class TodoControllerTest {
+class TodoControllerIntegrationTest {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    @MockkBean
-    lateinit var todoService: TodoService
+    @Autowired
+    lateinit var todoRepository: TodoRepository
+
+    @BeforeEach
+    fun setUp(){
+        val todo = TodoEntity(1,"a todo", "more details...")
+        todoRepository.save(todo)
+    }
 
     @Test
     fun `should return a todo when id given`() {
-        every { todoService.getTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
-
+        //given
+        //when
         val todo = webTestClient.get()
             .uri("/todos/1")
             .exchange()
@@ -35,8 +40,8 @@ class TodoControllerTest {
             .returnResult()
             .responseBody
 
+        //then
         assertThat(todo!!.id).isEqualTo(1)
-
-        verify { todoService.getTodo(any()) }
     }
+
 }

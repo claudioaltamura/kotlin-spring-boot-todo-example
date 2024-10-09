@@ -1,6 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import com.ninjasquad.springmockk.MockkBean
+import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
 import io.mockk.every
@@ -26,7 +27,7 @@ class TodoControllerTest {
 
     @Test
     fun `should add a todo successfully`() {
-        val todo = Todo(1, "a todo", "this is a todo.")
+        val newTodo = NewTodo("a todo", "this is a todo.")
 
         every { todoService.addTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
 
@@ -34,7 +35,7 @@ class TodoControllerTest {
             .post()
             .uri("/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(todo)
+            .bodyValue(newTodo)
             .exchange()
             .expectStatus().isCreated
             .expectBody(Todo::class.java)

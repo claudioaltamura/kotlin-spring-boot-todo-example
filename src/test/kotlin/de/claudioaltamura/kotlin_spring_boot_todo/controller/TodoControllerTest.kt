@@ -46,12 +46,28 @@ class TodoControllerTest {
 
         verify { todoService.addTodo(any()) }
     }
-        @Test
+
+    @Test
+    fun `should return todos find by title`() {
+        every { todoService.getTodos(any()) }.returns(listOf(Todo(1, "a todo", "this is a todo.")))
+
+        val todoList = webTestClient.get()
+            .uri { uriBuilder -> uriBuilder.path("/todos").queryParam("title", "todo").build() }
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(Todo::class.java)
+            .returnResult()
+            .responseBody
+
+        assertThat(todoList!!.size).isEqualTo(1)
+    }
+
+    @Test
     fun `should return a todo when id given`() {
         every { todoService.getTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
 
         val todo = webTestClient.get()
-            .uri("/todos/1")
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(2) }
             .exchange()
             .expectStatus().isOk
             .expectBody(Todo::class.java)

@@ -2,10 +2,9 @@ package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
-import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
-import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
+import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
+import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +14,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 @AutoConfigureWebTestClient
 class TodoControllerIntegrationTest {
 
@@ -22,13 +22,7 @@ class TodoControllerIntegrationTest {
     lateinit var webTestClient: WebTestClient
 
     @Autowired
-    lateinit var todoRepository: TodoRepository
-
-    @BeforeEach
-    fun setUp(){
-        val todo = TodoEntity(1,"a todo", "more details...")
-        todoRepository.save(todo)
-    }
+    lateinit var todoService: TodoService
 
     @Test
     fun `should add a todo successfully`() {
@@ -53,6 +47,10 @@ class TodoControllerIntegrationTest {
 
     @Test
     fun `should return todos find by title`() {
+        //given
+        todoService.addTodo(NewTodo("a todo", "more details..."))
+
+        //when
         val todoList = webTestClient.get()
             .uri { uriBuilder -> uriBuilder.path("/todos").queryParam("title", "todo").build() }
             .exchange()
@@ -61,12 +59,15 @@ class TodoControllerIntegrationTest {
             .returnResult()
             .responseBody
 
+        //then
         assertThat(todoList!!.size).isEqualTo(1)
     }
 
     @Test
     fun `should return a todo when id given`() {
         //given
+        todoService.addTodo(NewTodo("a todo", "more details..."))
+
         //when
         val todo = webTestClient.get()
             .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }

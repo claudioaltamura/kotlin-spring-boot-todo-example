@@ -6,11 +6,13 @@ import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 private val logger = KotlinLogging.logger {}
 
 @Service
+@Transactional
 class TodoService(val todoRepository: TodoRepository) {
 
     fun addTodo(newTodo: NewTodo): Todo {

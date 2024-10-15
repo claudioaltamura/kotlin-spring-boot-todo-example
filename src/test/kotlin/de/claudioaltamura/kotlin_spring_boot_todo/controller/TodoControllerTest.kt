@@ -67,7 +67,7 @@ class TodoControllerTest {
         every { todoService.getTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
 
         val todo = webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(2) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
             .exchange()
             .expectStatus().isOk
             .expectBody(Todo::class.java)
@@ -78,4 +78,25 @@ class TodoControllerTest {
 
         verify { todoService.getTodo(any()) }
     }
+
+    @Test
+    fun `should update a todo when found`() {
+        val updatedTodo = Todo(1, "a todo", "changed description")
+
+        every { todoService.updateTodo(any(), any()) }.returns(updatedTodo)
+
+        val todo = webTestClient.put()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .bodyValue(updatedTodo)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(Todo::class.java)
+            .returnResult()
+            .responseBody
+
+        assertThat(todo!!.description).isEqualTo("changed description")
+
+        verify { todoService.updateTodo(any(),any()) }
+    }
+
 }

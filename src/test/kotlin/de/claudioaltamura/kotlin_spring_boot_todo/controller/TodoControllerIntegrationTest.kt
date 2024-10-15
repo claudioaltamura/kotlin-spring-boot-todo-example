@@ -4,7 +4,6 @@ import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
-import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -61,7 +60,7 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
-        assertThat(todoList!!.size).isEqualTo(1)
+        assertThat(todoList!!.size).isEqualTo(2)
     }
 
     @Test

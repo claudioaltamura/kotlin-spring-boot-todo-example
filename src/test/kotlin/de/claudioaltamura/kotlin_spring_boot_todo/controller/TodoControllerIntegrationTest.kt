@@ -2,10 +2,12 @@ package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
+import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
 import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -14,7 +16,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 @AutoConfigureWebTestClient
 class TodoControllerIntegrationTest {
 
@@ -79,6 +80,43 @@ class TodoControllerIntegrationTest {
 
         //then
         assertThat(todo!!.id).isEqualTo(1)
+    }
+
+    @Test
+    fun `should update a todo when found`() {
+        //given
+        val addedTodo = todoService.addTodo(NewTodo("a todo", "this is a todo."))
+
+        //when
+        val updatedTodo = Todo(addedTodo.id, "a todo", "changed description")
+        val changedTodo = webTestClient.put()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(addedTodo.id) }
+            .bodyValue(updatedTodo)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(Todo::class.java)
+            .returnResult()
+            .responseBody
+
+        //then
+        assertThat(changedTodo!!.description).isEqualTo("changed description")
+    }
+
+    @Test
+    fun `should delete a todo when found`() {
+        //given
+        val addedTodo = todoService.addTodo(NewTodo("a todo", "this is a todo."))
+
+        //when
+        webTestClient.delete()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(addedTodo.id) }
+            .exchange()
+            .expectStatus().isNoContent
+
+        //then
+        assertThrows<TodoNotFoundException> { todoService.getTodo(addedTodo.id) }
+
+
     }
 
 }

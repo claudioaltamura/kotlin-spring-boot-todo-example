@@ -5,6 +5,7 @@ import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -96,7 +97,19 @@ class TodoControllerTest {
 
         assertThat(todo!!.description).isEqualTo("changed description")
 
-        verify { todoService.updateTodo(any(),any()) }
+        verify { todoService.updateTodo(any(), any()) }
+    }
+
+    @Test
+    fun `should delete a todo when found`() {
+        justRun { todoService.deleteTodo(any()) }
+
+        webTestClient.delete()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .exchange()
+            .expectStatus().isNoContent
+
+        verify(exactly = 1) { todoService.deleteTodo(any()) }
     }
 
 }

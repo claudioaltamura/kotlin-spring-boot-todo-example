@@ -14,11 +14,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException
 @RestControllerAdvice
 class TodoApplicationRestControllerAdvice {
 
-    @ExceptionHandler(Exception::class)
-    fun handleTodoNotFoundException(exception: Exception): ApplicationError = ApplicationError(
-        HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message!!
-    )
-
     @ExceptionHandler(TodoNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleTodoNotFoundException(exception: TodoNotFoundException): ApplicationError = ApplicationError(
@@ -55,5 +50,10 @@ class TodoApplicationRestControllerAdvice {
 
         return ApplicationError(HttpStatus.BAD_REQUEST.value(), errors)
     }
+
+    @ExceptionHandler(Exception::class)
+    fun handleTodoNotFoundException(exception: Exception): ApplicationError = ApplicationError(
+        HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message!!
+    )
 
 }

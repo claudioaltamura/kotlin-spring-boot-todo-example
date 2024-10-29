@@ -1,5 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import de.claudioaltamura.kotlin_spring_boot_todo.dto.ApplicationError
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
@@ -20,6 +22,9 @@ class TodoControllerIntegrationTest {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
+
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
 
     @Autowired
     lateinit var todoService: TodoService
@@ -46,6 +51,17 @@ class TodoControllerIntegrationTest {
     }
 
     @Test
+    fun `should return a bad request when given a faulty todo`() {
+        webTestClient
+            .post()
+            .uri("/todos")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(objectMapper.writeValueAsString("{\"description\": \"todo\"}"))
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @Test
     fun `should return todos find by title`() {
         //given
         todoService.addTodo(NewTodo("a todo", "more details..."))
@@ -64,6 +80,15 @@ class TodoControllerIntegrationTest {
     }
 
     @Test
+    fun `should return a bad request error when not title parameter given`() {
+        webTestClient.get()
+            .uri { uriBuilder -> uriBuilder.path("/todos").build() }
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBodyList(ApplicationError::class.java)
+    }
+
+    @Test
     fun `should return a todo when id given`() {
         //given
         todoService.addTodo(NewTodo("a todo", "more details..."))
@@ -79,6 +104,16 @@ class TodoControllerIntegrationTest {
 
         //then
         assertThat(todo!!.id).isEqualTo(1)
+    }
+
+    @Test
+    fun `should return a not found error when id given`() {
+        val noExistingTodo = 999
+        webTestClient.get()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(noExistingTodo) }
+            .exchange()
+            .expectStatus().isNotFound
+            .expectBody(ApplicationError::class.java)
     }
 
     @Test

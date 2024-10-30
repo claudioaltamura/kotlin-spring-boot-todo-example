@@ -30,7 +30,7 @@ class TodoControllerTest {
     fun `should add a todo successfully`() {
         val newTodo = NewTodo("a todo", "this is a todo.")
 
-        every { todoService.addTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
+        every { todoService.addTodo(any()) }.returns(Todo(1L, "a todo", "this is a todo."))
 
         val createdToDo = webTestClient
             .post()
@@ -43,14 +43,14 @@ class TodoControllerTest {
             .returnResult()
             .responseBody
 
-        assertThat(createdToDo!!.id).isEqualTo(1)
+        assertThat(createdToDo!!.id).isEqualTo(1L)
 
         verify { todoService.addTodo(any()) }
     }
 
     @Test
     fun `should return todos find by title`() {
-        every { todoService.getTodos(any()) }.returns(listOf(Todo(1, "a todo", "this is a todo.")))
+        every { todoService.getTodos(any()) }.returns(listOf(Todo(1L, "a todo", "this is a todo.")))
 
         val todoList = webTestClient.get()
             .uri { uriBuilder -> uriBuilder.path("/todos").queryParam("title", "todo").build() }
@@ -65,29 +65,29 @@ class TodoControllerTest {
 
     @Test
     fun `should return a todo when id given`() {
-        every { todoService.getTodo(any()) }.returns(Todo(1, "a todo", "this is a todo."))
+        every { todoService.getTodo(any()) }.returns(Todo(1L, "a todo", "this is a todo."))
 
         val todo = webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1L) }
             .exchange()
             .expectStatus().isOk
             .expectBody(Todo::class.java)
             .returnResult()
             .responseBody
 
-        assertThat(todo!!.id).isEqualTo(1)
+        assertThat(todo!!.id).isEqualTo(1L)
 
         verify { todoService.getTodo(any()) }
     }
 
     @Test
     fun `should update a todo when found`() {
-        val updatedTodo = Todo(1, "a todo", "changed description")
+        val updatedTodo = Todo(1L, "a todo", "changed description")
 
         every { todoService.updateTodo(any(), any()) }.returns(updatedTodo)
 
         val todo = webTestClient.put()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1L) }
             .bodyValue(updatedTodo)
             .exchange()
             .expectStatus().isOk
@@ -105,7 +105,7 @@ class TodoControllerTest {
         justRun { todoService.deleteTodo(any()) }
 
         webTestClient.delete()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1L) }
             .exchange()
             .expectStatus().isNoContent
 

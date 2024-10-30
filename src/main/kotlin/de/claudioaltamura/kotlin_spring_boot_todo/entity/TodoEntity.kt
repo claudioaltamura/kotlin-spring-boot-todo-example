@@ -4,10 +4,10 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name="todos")
-data class TodoEntity (
+class TodoEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Int?,
+    var id: Long?,
     var title: String,
     var description: String
 ){

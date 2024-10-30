@@ -95,7 +95,7 @@ class TodoControllerIntegrationTest {
 
         //when
         val todo = webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1L) }
             .exchange()
             .expectStatus().isOk
             .expectBody(Todo::class.java)
@@ -103,12 +103,12 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
-        assertThat(todo!!.id).isEqualTo(1)
+        assertThat(todo!!.id).isEqualTo(1L)
     }
 
     @Test
     fun `should return a not found error when id given`() {
-        val noExistingTodo = 999
+        val noExistingTodo = 999L
         webTestClient.get()
             .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(noExistingTodo) }
             .exchange()

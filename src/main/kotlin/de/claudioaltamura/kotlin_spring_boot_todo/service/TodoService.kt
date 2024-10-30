@@ -36,7 +36,7 @@ class TodoService(val todoRepository: TodoRepository) {
         }
     }
 
-    fun getTodo(id: Int): Todo {
+    fun getTodo(id: Long): Todo {
         val existingTodo = todoRepository.findById(id)
 
         return if (existingTodo.isPresent) {
@@ -49,7 +49,7 @@ class TodoService(val todoRepository: TodoRepository) {
         }
     }
 
-    fun updateTodo(id: Int, todo: Todo): Todo {
+    fun updateTodo(id: Long, todo: Todo): Todo {
         val existingTodo = todoRepository.findById(id)
 
         return if (existingTodo.isPresent) {
@@ -65,7 +65,7 @@ class TodoService(val todoRepository: TodoRepository) {
         }
     }
 
-    fun deleteTodo(id: Int) {
+    fun deleteTodo(id: Long) {
         val existingTodo = todoRepository.findById(id)
         if (existingTodo.isPresent) {
             existingTodo.get()

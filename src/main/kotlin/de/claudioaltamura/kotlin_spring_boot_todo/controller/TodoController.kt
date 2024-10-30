@@ -33,20 +33,20 @@ class TodoController(val todoService: TodoService) {
     }
 
     @GetMapping("/{id}")
-    fun getTodo(@PathVariable("id") id: Int) : ResponseEntity<Todo> {
+    fun getTodo(@PathVariable("id") id: Long) : ResponseEntity<Todo> {
         logger.info { "get todo for '${id}'" }
         return ResponseEntity.ok(todoService.getTodo(id))
     }
 
     @PutMapping("/{id}")
-    fun updateTodo(@RequestBody @Valid todo: Todo, @PathVariable("id") @Min(value = 0)  id : Int)  : ResponseEntity<Todo> {
+    fun updateTodo(@RequestBody @Valid todo: Todo, @PathVariable("id") @Min(value = 0)  id : Long)  : ResponseEntity<Todo> {
         logger.info { "update todo '${id}', '${todo}'" }
         return ResponseEntity.ok(todoService.updateTodo(id, todo))
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteTodo(@PathVariable("id") @Min(value = 0) id : Int){
+    fun deleteTodo(@PathVariable("id") @Min(value = 0) id : Long){
         logger.info { "delete todo '${id}'" }
         todoService.deleteTodo(id)
     }

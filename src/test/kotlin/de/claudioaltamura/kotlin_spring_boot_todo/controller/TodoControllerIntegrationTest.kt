@@ -52,13 +52,18 @@ class TodoControllerIntegrationTest {
 
     @Test
     fun `should return a bad request when given a faulty todo`() {
-        webTestClient
+        val applicationError = webTestClient
             .post()
             .uri("/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(objectMapper.writeValueAsString("{\"description\": \"todo\"}"))
+            .bodyValue(objectMapper.writeValueAsString("{\"title\": \"\", \"description\": \"todo\"}"))
             .exchange()
             .expectStatus().isBadRequest
+            .expectBody(ApplicationError::class.java)
+            .returnResult()
+            .responseBody
+
+        assertThat(applicationError!!.message).contains("JSON parse error: Cannot construct instance of `de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo` (although at least one Creator exists): no String-argument constructor/factory method to deserialize from String value")
     }
 
     @Test

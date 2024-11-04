@@ -39,12 +39,11 @@ class TodoApplicationRestControllerAdvice {
     )
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ApplicationError {
-        val errors = exception.bindingResult.allErrors
-            .map { error -> error.defaultMessage!! }
-            .sorted()
-            .joinToString {
+        val errors = exception.bindingResult.fieldErrors
+            .map { fieldError -> fieldError.defaultMessage!! }
+            .joinToString(", ") {
                 it
             }
 

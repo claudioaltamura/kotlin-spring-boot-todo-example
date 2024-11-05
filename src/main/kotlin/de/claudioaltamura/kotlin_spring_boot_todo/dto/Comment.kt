@@ -2,5 +2,6 @@ package de.claudioaltamura.kotlin_spring_boot_todo.dto
 
 data class Comment (
     val id: Long,
-    val text: String
+    val text: String,
+    val todoId: Long
 )

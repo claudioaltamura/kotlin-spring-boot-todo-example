@@ -1,6 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.ApplicationError
+import de.claudioaltamura.kotlin_spring_boot_todo.exception.CommentNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -13,6 +14,12 @@ import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @RestControllerAdvice
 class TodoApplicationRestControllerAdvice {
+
+    @ExceptionHandler(CommentNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleTodoNotFoundException(exception: CommentNotFoundException): ApplicationError = ApplicationError(
+        HttpStatus.NOT_FOUND.value(), exception.message
+    )
 
     @ExceptionHandler(TodoNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -51,7 +58,7 @@ class TodoApplicationRestControllerAdvice {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleTodoNotFoundException(exception: Exception): ApplicationError = ApplicationError(
+    fun handleException(exception: Exception): ApplicationError = ApplicationError(
         HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message!!
     )
 

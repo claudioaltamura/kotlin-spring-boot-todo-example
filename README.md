@@ -7,6 +7,8 @@ Example project with Kotlin and Spring Boot
 
 ## Example
 
+Todos
+
 GET
 ```
     curl -i http://localhost:8080/todos/1
@@ -39,6 +41,43 @@ DELETE
     -H "Content-Type: application/json" \
     -X DELETE http://localhost:8080/todos/1
 ```
+
+Comments
+
+GET
+```
+    curl -i http://localhost:8080/comments/1
+```
+
+GET
+```
+    curl -i 'http://localhost:8080/comments?todoId=1'
+```
+
+
+POST
+```
+    curl -i \
+    -d '{"text":"a comment", "todoId": 1}' \
+    -H "Content-Type: application/json" \
+    -X POST http://localhost:8080/comments
+```
+
+PUT
+```
+    curl -i \
+    -d '{"id": 1, "text":"updated note", "todoId": 1}' \
+    -H "Content-Type: application/json" \
+    -X PUT http://localhost:8080/comments/1
+```
+
+DELETE
+```
+    curl -i \
+    -H "Content-Type: application/json" \
+    -X DELETE http://localhost:8080/comments/1
+```
+
 
 ## H2
 

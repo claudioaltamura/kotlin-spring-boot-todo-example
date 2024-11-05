@@ -16,12 +16,12 @@ private val logger = KotlinLogging.logger {}
 class TodoService(val todoRepository: TodoRepository) {
 
     fun addTodo(newTodo: NewTodo): Todo {
-        val todoEntity = newTodo.let {
+        val todo = newTodo.let {
             TodoEntity(null, it.title, it.description)
         }
-        todoRepository.save(todoEntity)
-        logger.info { "saved todo is : $todoRepository" }
-        return todoEntity.let {
+        todoRepository.save(todo)
+        logger.info { "saved todo is : $todo" }
+        return todo.let {
             Todo(it.id!!, it.title, it.description)
         }
     }

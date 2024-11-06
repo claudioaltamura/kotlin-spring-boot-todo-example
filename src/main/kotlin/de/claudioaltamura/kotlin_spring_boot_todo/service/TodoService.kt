@@ -5,11 +5,8 @@ import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-
-private val logger = KotlinLogging.logger {}
 
 @Service
 @Transactional
@@ -20,7 +17,7 @@ class TodoService(val todoRepository: TodoRepository) {
             TodoEntity(null, it.title, it.description)
         }
         todoRepository.save(todo)
-        logger.info { "saved todo is : $todo" }
+
         return todo.let {
             Todo(it.id!!, it.title, it.description)
         }
@@ -67,6 +64,7 @@ class TodoService(val todoRepository: TodoRepository) {
 
     fun deleteTodo(id: Long) {
         val existingTodo = todoRepository.findById(id)
+
         if (existingTodo.isPresent) {
             existingTodo.get()
                 .let {

@@ -8,6 +8,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
@@ -16,6 +17,7 @@ private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/todos")
+@Validated
 class TodoController(val todoService: TodoService) {
 
     @PostMapping

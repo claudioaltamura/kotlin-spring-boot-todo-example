@@ -8,13 +8,13 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.util.stream.Stream
 
 @DataJpaTest
-class TodoRepositoryTest {
-
-    @Autowired
-    lateinit var todoRepository: TodoRepository
+class TodoRepositoryTest @Autowired constructor(
+    val entityManager: TestEntityManager,
+    val todoRepository: TodoRepository) {
 
     @BeforeEach
     fun setUp() {
@@ -25,7 +25,7 @@ class TodoRepositoryTest {
     @MethodSource("todos")
     fun findByTitleContaining(name: String, expectedSize:  Int) {
         val todo = TodoEntity(null,  name, "this is a todo.")
-        todoRepository.save(todo)
+        entityManager.persist(todo)
 
         val todoList = todoRepository.findByTitle(todo.title)
 
@@ -41,6 +41,5 @@ class TodoRepositoryTest {
 
         }
     }
-
 
 }

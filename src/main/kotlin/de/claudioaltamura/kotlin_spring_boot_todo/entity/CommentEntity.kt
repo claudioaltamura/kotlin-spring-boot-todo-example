@@ -14,6 +14,7 @@ class CommentEntity(
     var todo: TodoEntity
 ){
     override fun toString(): String {
-        return "Comment(id=$id, text='$text', todo='$todo.id'"
+        val todoId = todo.id
+        return "Comment(id=$id, text='$text', todo='$todoId')"
     }
 }

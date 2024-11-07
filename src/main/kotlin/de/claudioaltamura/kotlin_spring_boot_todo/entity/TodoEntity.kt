@@ -12,6 +12,6 @@ class TodoEntity(
     var description: String
 ){
     override fun toString(): String {
-        return "Todo(id=$id, title='$title', description='$description'"
+        return "Todo(id=$id, title='$title', description='$description')"
     }
 }

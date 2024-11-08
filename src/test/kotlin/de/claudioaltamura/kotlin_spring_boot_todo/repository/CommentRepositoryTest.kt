@@ -27,7 +27,6 @@ class CommentRepositoryTest @Autowired constructor(
         entityManager.persist(todo)
         val comment = CommentEntity(null,"comment", todo)
         entityManager.persist(comment)
-        entityManager.flush()
 
         val comments = commentRepository.findByTodo(todo.id!!)
 

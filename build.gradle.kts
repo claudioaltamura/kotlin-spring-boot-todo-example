@@ -4,7 +4,6 @@ plugins {
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
 	kotlin("plugin.jpa") version "1.9.25"
-	kotlin("plugin.allopen") version "1.9.22"
 	id("com.github.ben-manes.versions") version "0.51.0"
 }
 
@@ -19,12 +18,6 @@ java {
 
 repositories {
 	mavenCentral()
-}
-
-allOpen {
-	annotation("jakarta.persistence.Entity")
-	annotation("jakarta.persistence.Embeddable")
-	annotation("jakarta.persistence.MappedSuperclass")
 }
 
 dependencies {

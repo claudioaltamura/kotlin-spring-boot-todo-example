@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.ApplicationError
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
+import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
-import de.claudioaltamura.kotlin_spring_boot_todo.service.TodoService
+import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -27,7 +28,12 @@ class TodoControllerIntegrationTest {
     lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    lateinit var todoService: TodoService
+    lateinit var todoRepository: TodoRepository
+
+    @BeforeEach
+    fun setUp() {
+        todoRepository.deleteAll()
+    }
 
     @Test
     fun `should add a todo successfully`() {
@@ -47,6 +53,7 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
+        todoRepository.findById(createdToDo!!.id).orElseThrow { TodoNotFoundException("Todo not found") }
         assertThat(createdToDo).isNotNull
     }
 
@@ -69,11 +76,11 @@ class TodoControllerIntegrationTest {
     @Test
     fun `should return todos find by title`() {
         //given
-        todoService.addTodo(NewTodo("a todo", "more details..."))
+        val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))
 
         //when
         val todoList = webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos").queryParam("title", "todo").build() }
+            .uri { uriBuilder -> uriBuilder.path("/todos").queryParam("title", todo.title).build() }
             .exchange()
             .expectStatus().isOk
             .expectBodyList(Todo::class.java)
@@ -81,7 +88,7 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
-        assertThat(todoList!!.size).isEqualTo(2)
+        assertThat(todoList!!.size).isEqualTo(1)
     }
 
     @Test
@@ -96,11 +103,11 @@ class TodoControllerIntegrationTest {
     @Test
     fun `should return a todo when id given`() {
         //given
-        todoService.addTodo(NewTodo("a todo", "more details..."))
+        val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))
 
         //when
-        val todo = webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(1L) }
+        val createdTodo = webTestClient.get()
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(todo.id)}
             .exchange()
             .expectStatus().isOk
             .expectBody(Todo::class.java)
@@ -108,7 +115,7 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
-        assertThat(todo!!.id).isEqualTo(1L)
+        assertThat(createdTodo!!.id).isEqualTo(todo.id)
     }
 
     @Test
@@ -124,12 +131,12 @@ class TodoControllerIntegrationTest {
     @Test
     fun `should update a todo when found`() {
         //given
-        val addedTodo = todoService.addTodo(NewTodo("a todo", "this is a todo."))
+        val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))
 
         //when
-        val updatedTodo = Todo(addedTodo.id, "a todo", "changed description")
+        val updatedTodo = Todo(todo.id!!, "todo", "changed description")
         val changedTodo = webTestClient.put()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(addedTodo.id) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(updatedTodo.id) }
             .bodyValue(updatedTodo)
             .exchange()
             .expectStatus().isOk
@@ -138,24 +145,25 @@ class TodoControllerIntegrationTest {
             .responseBody
 
         //then
-        assertThat(changedTodo!!.description).isEqualTo("changed description")
+        val todoFromDb = todoRepository.findById(changedTodo!!.id).orElseThrow { TodoNotFoundException("Todo not found") }
+        assertThat(todoFromDb.description).isEqualTo("changed description")
+        assertThat(changedTodo.description).isEqualTo("changed description")
     }
 
     @Test
     fun `should delete a todo when found`() {
         //given
-        val addedTodo = todoService.addTodo(NewTodo("a todo", "this is a todo."))
+        //given
+        val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))
 
         //when
         webTestClient.delete()
-            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(addedTodo.id) }
+            .uri { uriBuilder -> uriBuilder.path("/todos/{id}").build(todo.id) }
             .exchange()
             .expectStatus().isNoContent
 
         //then
-        assertThrows<TodoNotFoundException> { todoService.getTodo(addedTodo.id) }
-
-
+        assertThat(todoRepository.existsById(todo.id!!)).isFalse
     }
 
 }

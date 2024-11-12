@@ -1,14 +1,11 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.claudioaltamura.kotlin_spring_boot_todo.dto.ApplicationError
-import de.claudioaltamura.kotlin_spring_boot_todo.dto.NewTodo
-import de.claudioaltamura.kotlin_spring_boot_todo.dto.Todo
+import de.claudioaltamura.kotlin_spring_boot_todo.dto.*
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
 import de.claudioaltamura.kotlin_spring_boot_todo.repository.TodoRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,11 +26,6 @@ class TodoControllerIntegrationTest {
 
     @Autowired
     lateinit var todoRepository: TodoRepository
-
-    @BeforeEach
-    fun setUp() {
-        todoRepository.deleteAll()
-    }
 
     @Test
     fun `should add a todo successfully`() {
@@ -76,7 +68,7 @@ class TodoControllerIntegrationTest {
     @Test
     fun `should return todos find by title`() {
         //given
-        val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))
+        val todo = todoRepository.save(TodoEntity(null, "special todo", "this is a todo."))
 
         //when
         val todoList = webTestClient.get()

@@ -9,7 +9,7 @@ class CommentEntity(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long?,
     var text: String,
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todo_id", nullable = false, foreignKey = ForeignKey(name = "FK_TODOS_COMMENTS"))
     var todo: TodoEntity
 ){

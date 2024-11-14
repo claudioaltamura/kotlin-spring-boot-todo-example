@@ -2,15 +2,17 @@ spring:
   application:
     name: kotlin-spring-boot-todo
   datasource:
-    url: jdbc:h2:mem:tododb
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/tododb
+    driverClassName: org.postgresql.Driver
     username: app
     password: password
+  flyway:
+      enabled: true
+      baseline-on-migrate: true
   jpa:
-    database: h2
-    database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: true
-    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      default_schema: public
     properties:
       hibernate:
         format_sql: true
@@ -22,9 +24,6 @@ spring:
           orm:
             jdbc:
               bind: trace
-  h2:
-    console:
-      enabled: true
   management:
     endpoints:
       web:

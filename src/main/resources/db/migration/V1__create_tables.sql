@@ -1,0 +1,22 @@
+CREATE SEQUENCE IF NOT EXISTS todos_seq START WITH 1 INCREMENT BY 50;
+
+CREATE TABLE IF NOT EXISTS todos (
+    id BIGINT NOT NULL,
+    description VARCHAR(255),
+    title varchar(255),
+    PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE IF NOT EXISTS comments_seq START WITH 1 INCREMENT BY 50;
+
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGINT NOT NULL,
+    todo_id BIGINT NOT NULL,
+    text VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS comments
+   ADD CONSTRAINT fk_todos_comments
+   FOREIGN KEY (todo_id)
+   REFERENCES todos;

@@ -1,3 +1,14 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.flywaydb:flyway-database-postgresql:10.21.0")
+	}
+}
+
+apply(plugin = "org.flywaydb.flyway")
+
 plugins {
 	kotlin("jvm") version "2.0.21"
 	kotlin("plugin.spring") version "2.0.21"
@@ -6,6 +17,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.6"
 	id("com.github.ben-manes.versions") version "0.51.0"
 	id("com.diffplug.spotless") version "6.23.2"
+	id("org.flywaydb.flyway") version "10.21.0"
 }
 
 spotless {
@@ -34,12 +46,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
-	runtimeOnly("com.h2database:h2")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-database-postgresql")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql:42.7.4")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("io.mockk:mockk:1.13.13")
 	testImplementation("com.ninja-squad:springmockk:4.0.2")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

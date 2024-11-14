@@ -84,15 +84,6 @@ class TodoControllerIntegrationTest {
     }
 
     @Test
-    fun `should return a bad request error when not title parameter given`() {
-        webTestClient.get()
-            .uri { uriBuilder -> uriBuilder.path("/todos").build() }
-            .exchange()
-            .expectStatus().isBadRequest
-            .expectBodyList(ApplicationError::class.java)
-    }
-
-    @Test
     fun `should return a todo when id given`() {
         //given
         val todo = todoRepository.save(TodoEntity(null, "todo", "this is a todo."))

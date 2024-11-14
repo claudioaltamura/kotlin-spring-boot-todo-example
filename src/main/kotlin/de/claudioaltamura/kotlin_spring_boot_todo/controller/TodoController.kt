@@ -29,7 +29,7 @@ class TodoController(val todoService: TodoService) {
     }
 
     @GetMapping
-    fun getTodos(@RequestParam("title") title: String) : ResponseEntity<List<Todo>> {
+    fun getTodos(@RequestParam(required = false, value = "title") title: String?) : ResponseEntity<List<Todo>> {
         logger.info { "get todos by title: '${title}'" }
         return ResponseEntity.ok(todoService.getTodos(title))
     }

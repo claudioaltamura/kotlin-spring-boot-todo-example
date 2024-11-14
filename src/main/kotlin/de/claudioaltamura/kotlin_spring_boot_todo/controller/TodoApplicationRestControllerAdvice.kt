@@ -15,47 +15,47 @@ import org.springframework.web.servlet.resource.NoResourceFoundException
 @RestControllerAdvice
 class TodoApplicationRestControllerAdvice {
 
-    @ExceptionHandler(CommentNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleTodoNotFoundException(exception: CommentNotFoundException): ApplicationError =
-        ApplicationError(HttpStatus.NOT_FOUND.value(), exception.message)
+  @ExceptionHandler(CommentNotFoundException::class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  fun handleTodoNotFoundException(exception: CommentNotFoundException): ApplicationError =
+    ApplicationError(HttpStatus.NOT_FOUND.value(), exception.message)
 
-    @ExceptionHandler(TodoNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleTodoNotFoundException(exception: TodoNotFoundException): ApplicationError =
-        ApplicationError(HttpStatus.NOT_FOUND.value(), exception.message)
+  @ExceptionHandler(TodoNotFoundException::class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  fun handleTodoNotFoundException(exception: TodoNotFoundException): ApplicationError =
+    ApplicationError(HttpStatus.NOT_FOUND.value(), exception.message)
 
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleMissingRequestValueException(
-        exception: HttpMessageNotReadableException
-    ): ApplicationError = ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
+  @ExceptionHandler(HttpMessageNotReadableException::class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  fun handleMissingRequestValueException(
+    exception: HttpMessageNotReadableException
+  ): ApplicationError = ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
 
-    @ExceptionHandler(NoResourceFoundException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleMissingRequestValueException(exception: NoResourceFoundException): ApplicationError =
-        ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
+  @ExceptionHandler(NoResourceFoundException::class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  fun handleMissingRequestValueException(exception: NoResourceFoundException): ApplicationError =
+    ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
 
-    @ExceptionHandler(MissingRequestValueException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleMissingRequestValueException(
-        exception: MissingRequestValueException
-    ): ApplicationError = ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
+  @ExceptionHandler(MissingRequestValueException::class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  fun handleMissingRequestValueException(
+    exception: MissingRequestValueException
+  ): ApplicationError = ApplicationError(HttpStatus.BAD_REQUEST.value(), exception.message!!)
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleMethodArgumentNotValidException(
-        exception: MethodArgumentNotValidException
-    ): ApplicationError {
-        val errors =
-            exception.bindingResult.fieldErrors
-                .map { fieldError -> fieldError.defaultMessage!! }
-                .joinToString(", ") { it }
+  @ExceptionHandler(MethodArgumentNotValidException::class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  fun handleMethodArgumentNotValidException(
+    exception: MethodArgumentNotValidException
+  ): ApplicationError {
+    val errors =
+      exception.bindingResult.fieldErrors
+        .map { fieldError -> fieldError.defaultMessage!! }
+        .joinToString(", ") { it }
 
-        return ApplicationError(HttpStatus.BAD_REQUEST.value(), errors)
-    }
+    return ApplicationError(HttpStatus.BAD_REQUEST.value(), errors)
+  }
 
-    @ExceptionHandler(Exception::class)
-    fun handleException(exception: Exception): ApplicationError =
-        ApplicationError(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message!!)
+  @ExceptionHandler(Exception::class)
+  fun handleException(exception: Exception): ApplicationError =
+    ApplicationError(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message!!)
 }

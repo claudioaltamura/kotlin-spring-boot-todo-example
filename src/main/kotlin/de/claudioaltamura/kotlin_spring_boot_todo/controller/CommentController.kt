@@ -20,43 +20,43 @@ private val logger = KotlinLogging.logger {}
 @Validated
 class CommentController(val commentService: CommentService) {
 
-    @PostMapping
-    fun addComment(@RequestBody @Valid newComment: NewComment): ResponseEntity<Comment> {
-        logger.info { "add comment: '${newComment}'" }
-        val comment = commentService.addComment(newComment)
-        val location: URI =
-            ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(comment.id)
-                .toUri()
-        return ResponseEntity.created(location).body(comment)
-    }
+  @PostMapping
+  fun addComment(@RequestBody @Valid newComment: NewComment): ResponseEntity<Comment> {
+    logger.info { "add comment: '${newComment}'" }
+    val comment = commentService.addComment(newComment)
+    val location: URI =
+      ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(comment.id)
+        .toUri()
+    return ResponseEntity.created(location).body(comment)
+  }
 
-    @GetMapping("/{id}")
-    fun getComment(@PathVariable("id") id: Long): ResponseEntity<Comment> {
-        logger.info { "get comment for '${id}'" }
-        return ResponseEntity.ok(commentService.getComment(id))
-    }
+  @GetMapping("/{id}")
+  fun getComment(@PathVariable("id") id: Long): ResponseEntity<Comment> {
+    logger.info { "get comment for '${id}'" }
+    return ResponseEntity.ok(commentService.getComment(id))
+  }
 
-    @GetMapping
-    fun getComments(@RequestParam("todoId") todoId: Long): ResponseEntity<List<Comment>> {
-        logger.info { "get comments by todoId: '${todoId}'" }
-        return ResponseEntity.ok(commentService.getCommentsByTodo(todoId))
-    }
+  @GetMapping
+  fun getComments(@RequestParam("todoId") todoId: Long): ResponseEntity<List<Comment>> {
+    logger.info { "get comments by todoId: '${todoId}'" }
+    return ResponseEntity.ok(commentService.getCommentsByTodo(todoId))
+  }
 
-    @PutMapping("/{id}")
-    fun updateComment(
-        @RequestBody @Valid comment: Comment,
-        @PathVariable("id") @Min(value = 0) id: Long
-    ): ResponseEntity<Comment> {
-        logger.info { "update comment '${id}', '${comment}'" }
-        return ResponseEntity.ok(commentService.updateComment(id, comment))
-    }
+  @PutMapping("/{id}")
+  fun updateComment(
+    @RequestBody @Valid comment: Comment,
+    @PathVariable("id") @Min(value = 0) id: Long
+  ): ResponseEntity<Comment> {
+    logger.info { "update comment '${id}', '${comment}'" }
+    return ResponseEntity.ok(commentService.updateComment(id, comment))
+  }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteComment(@PathVariable("id") @Min(value = 0) id: Long) {
-        logger.info { "delete comment '${id}'" }
-        commentService.deleteComment(id)
-    }
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  fun deleteComment(@PathVariable("id") @Min(value = 0) id: Long) {
+    logger.info { "delete comment '${id}'" }
+    commentService.deleteComment(id)
+  }
 }

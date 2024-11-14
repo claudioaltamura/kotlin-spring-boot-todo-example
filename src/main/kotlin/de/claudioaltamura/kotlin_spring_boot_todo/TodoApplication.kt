@@ -6,5 +6,5 @@ import org.springframework.boot.runApplication
 @SpringBootApplication class KotlinSpringBootTodoApplication
 
 fun main(args: Array<String>) {
-    runApplication<KotlinSpringBootTodoApplication>(*args)
+  runApplication<KotlinSpringBootTodoApplication>(*args)
 }

@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param
 
 interface CommentRepository : CrudRepository<CommentEntity, Long> {
 
-    @Query(value = "SELECT c FROM CommentEntity c WHERE c.todo.id = :todoId")
-    fun findByTodo(@Param("todoId") todoId: Long): List<CommentEntity>
+  @Query(value = "SELECT c FROM CommentEntity c WHERE c.todo.id = :todoId")
+  fun findByTodo(@Param("todoId") todoId: Long): List<CommentEntity>
 }

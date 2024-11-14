@@ -16,26 +16,26 @@ class TodoRepositoryTest
 @Autowired
 constructor(val entityManager: TestEntityManager, val todoRepository: TodoRepository) {
 
-    @BeforeEach
-    fun setUp() {
-        todoRepository.deleteAll()
+  @BeforeEach
+  fun setUp() {
+    todoRepository.deleteAll()
+  }
+
+  @ParameterizedTest
+  @MethodSource("todos")
+  fun findByTitleContaining(name: String, expectedSize: Int) {
+    val todo = TodoEntity(null, name, "this is a todo.")
+    entityManager.persist(todo)
+
+    val todoList = todoRepository.findByTitle(todo.title)
+
+    assertThat(todoList.size).isEqualTo(expectedSize)
+  }
+
+  companion object {
+    @JvmStatic
+    fun todos(): Stream<Arguments> {
+      return Stream.of(Arguments.arguments("todo", 1), Arguments.arguments("different", 1))
     }
-
-    @ParameterizedTest
-    @MethodSource("todos")
-    fun findByTitleContaining(name: String, expectedSize: Int) {
-        val todo = TodoEntity(null, name, "this is a todo.")
-        entityManager.persist(todo)
-
-        val todoList = todoRepository.findByTitle(todo.title)
-
-        assertThat(todoList.size).isEqualTo(expectedSize)
-    }
-
-    companion object {
-        @JvmStatic
-        fun todos(): Stream<Arguments> {
-            return Stream.of(Arguments.arguments("todo", 1), Arguments.arguments("different", 1))
-        }
-    }
+  }
 }

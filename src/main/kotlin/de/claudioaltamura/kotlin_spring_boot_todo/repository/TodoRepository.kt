@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param
 
 interface TodoRepository : CrudRepository<TodoEntity, Long> {
 
-    @Query(value = "SELECT t FROM TodoEntity t WHERE t.title like %:title%")
-    fun findByTitle(@Param("title") title: String): List<TodoEntity>
+  @Query(value = "SELECT t FROM TodoEntity t WHERE t.title like %:title%")
+  fun findByTitle(@Param("title") title: String): List<TodoEntity>
 }

@@ -13,26 +13,26 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 class CommentRepositoryTest
 @Autowired
 constructor(
-    val entityManager: TestEntityManager,
-    val commentRepository: CommentRepository,
-    val todoRepository: TodoRepository
+  val entityManager: TestEntityManager,
+  val commentRepository: CommentRepository,
+  val todoRepository: TodoRepository
 ) {
 
-    @BeforeEach
-    fun setUp() {
-        commentRepository.deleteAll()
-        todoRepository.deleteAll()
-    }
+  @BeforeEach
+  fun setUp() {
+    commentRepository.deleteAll()
+    todoRepository.deleteAll()
+  }
 
-    @Test
-    fun findByTodo() {
-        val todo = TodoEntity(null, "title", "this is a todo.")
-        entityManager.persist(todo)
-        val comment = CommentEntity(null, "comment", todo)
-        entityManager.persist(comment)
+  @Test
+  fun findByTodo() {
+    val todo = TodoEntity(null, "title", "this is a todo.")
+    entityManager.persist(todo)
+    val comment = CommentEntity(null, "comment", todo)
+    entityManager.persist(comment)
 
-        val comments = commentRepository.findByTodo(todo.id!!)
+    val comments = commentRepository.findByTodo(todo.id!!)
 
-        assertThat(comments.size).isEqualTo(1)
-    }
+    assertThat(comments.size).isEqualTo(1)
+  }
 }

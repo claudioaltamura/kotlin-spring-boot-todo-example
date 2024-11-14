@@ -10,10 +10,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
 @DataJpaTest
-class CommentRepositoryTest @Autowired constructor(
+class CommentRepositoryTest
+@Autowired
+constructor(
     val entityManager: TestEntityManager,
     val commentRepository: CommentRepository,
-    val todoRepository: TodoRepository) {
+    val todoRepository: TodoRepository
+) {
 
     @BeforeEach
     fun setUp() {
@@ -23,14 +26,13 @@ class CommentRepositoryTest @Autowired constructor(
 
     @Test
     fun findByTodo() {
-        val todo = TodoEntity(null,  "title", "this is a todo.")
+        val todo = TodoEntity(null, "title", "this is a todo.")
         entityManager.persist(todo)
-        val comment = CommentEntity(null,"comment", todo)
+        val comment = CommentEntity(null, "comment", todo)
         entityManager.persist(comment)
 
         val comments = commentRepository.findByTodo(todo.id!!)
 
         assertThat(comments.size).isEqualTo(1)
     }
-
 }

@@ -20,6 +20,11 @@ plugins {
 	id("org.flywaydb.flyway") version "10.21.0"
 }
 
+extra["kotlin-logging-jvm-version"] = "7.0.0"
+extra["postgresql-driver-version"] = "42.7.4"
+extra["mockk-version"] = "1.13.13"
+extra["springmockk-version"] = "4.0.2"
+
 spotless {
 	kotlin {
 		ktfmt().googleStyle()
@@ -46,16 +51,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+	implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlin-logging-jvm-version")}")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.postgresql:postgresql:42.7.4")
+	runtimeOnly("org.postgresql:postgresql:${property("postgresql-driver-version")}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
-	testImplementation("io.mockk:mockk:1.13.13")
-	testImplementation("com.ninja-squad:springmockk:4.0.2")
+	testImplementation("io.mockk:mockk:${property("mockk-version")}")
+	testImplementation("com.ninja-squad:springmockk:${property("springmockk-version")}")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")

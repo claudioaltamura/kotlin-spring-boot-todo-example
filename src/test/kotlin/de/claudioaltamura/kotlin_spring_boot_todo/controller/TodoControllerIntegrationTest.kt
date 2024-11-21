@@ -1,6 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTest
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.*
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.exception.TodoNotFoundException
@@ -15,7 +16,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class TodoControllerIntegrationTest {
+class TodoControllerIntegrationTest : AbstractDatabaseIntegrationTest() {
 
   @Autowired lateinit var webTestClient: WebTestClient
 

@@ -1,6 +1,6 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.repository
 
-import de.claudioaltamura.kotlin_spring_boot_todo.PostgreSQLContainerInitializer
+import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTest
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import java.util.stream.Stream
 import org.assertj.core.api.Assertions.assertThat
@@ -15,13 +15,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class TodoRepositoryTest
-@Autowired
-constructor(val entityManager: TestEntityManager, val todoRepository: TodoRepository): PostgreSQLContainerInitializer() {
+class TodoRepositoryTest : AbstractDatabaseIntegrationTest() {
+
+  @Autowired lateinit var entityManager: TestEntityManager
+
+  @Autowired lateinit var todoRepository: TodoRepository
 
   @BeforeEach
   fun setUp() {
-    todoRepository.deleteAll()
+    todoRepository.findByTitle("special_todo").forEach { todoRepository.delete(it) }
   }
 
   @ParameterizedTest
@@ -38,7 +40,7 @@ constructor(val entityManager: TestEntityManager, val todoRepository: TodoReposi
   companion object {
     @JvmStatic
     fun todos(): Stream<Arguments> {
-      return Stream.of(Arguments.arguments("todo", 1), Arguments.arguments("different", 1))
+      return Stream.of(Arguments.arguments("special_todo", 1), Arguments.arguments("different", 1))
     }
   }
 }

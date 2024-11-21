@@ -1,6 +1,7 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTest
 import de.claudioaltamura.kotlin_spring_boot_todo.dto.*
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.CommentEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
@@ -16,7 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class CommentControllerIntegrationTest {
+class CommentControllerIntegrationTest : AbstractDatabaseIntegrationTest() {
 
   @Autowired lateinit var webTestClient: WebTestClient
 

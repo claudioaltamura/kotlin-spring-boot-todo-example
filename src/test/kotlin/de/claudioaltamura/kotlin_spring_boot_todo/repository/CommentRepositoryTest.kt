@@ -1,10 +1,9 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.repository
 
-import de.claudioaltamura.kotlin_spring_boot_todo.PostgreSQLContainerInitializer
+import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTest
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.CommentEntity
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -13,19 +12,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CommentRepositoryTest
-@Autowired
-constructor(
-  val entityManager: TestEntityManager,
-  val commentRepository: CommentRepository,
-  val todoRepository: TodoRepository
-) : PostgreSQLContainerInitializer() {
+class CommentRepositoryTest : AbstractDatabaseIntegrationTest() {
 
-  @BeforeEach
-  fun setUp() {
-    commentRepository.deleteAll()
-    todoRepository.deleteAll()
-  }
+  @Autowired lateinit var entityManager: TestEntityManager
+
+  @Autowired lateinit var commentRepository: CommentRepository
 
   @Test
   fun findByTodo() {

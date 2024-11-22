@@ -4,6 +4,7 @@ import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTes
 import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import java.util.stream.Stream
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -20,11 +21,19 @@ class TodoRepositoryTest : AbstractDatabaseIntegrationTest() {
 
   @Autowired lateinit var todoRepository: TodoRepository
 
+  private val ids: MutableList<Long> = mutableListOf()
+
+  @BeforeEach
+  fun setUp() {
+    todoRepository.findByTitle("special_todo").forEach { todoRepository.delete(it) }
+  }
+
   @ParameterizedTest
   @MethodSource("todos")
   fun findByTitleContaining(name: String, expectedSize: Int) {
     val todo = TodoEntity(null, name, "this is a todo.")
     entityManager.persist(todo)
+    ids.add(todo.id!!)
 
     val todoList = todoRepository.findByTitle(todo.title)
 

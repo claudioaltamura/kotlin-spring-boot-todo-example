@@ -5,7 +5,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "comments")
 class CommentEntity(
-  @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long?,
+  @Id
+  @SequenceGenerator(name = "comments_seq", sequenceName = "comments_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comments_seq")
+  var id: Long?,
   var text: String,
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(

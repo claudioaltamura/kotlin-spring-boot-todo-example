@@ -5,7 +5,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "todos")
 class TodoEntity(
-  @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long?,
+  @Id
+  @SequenceGenerator(name = "todos_seq", sequenceName = "todos_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todos_seq")
+  var id: Long?,
   var title: String,
   var description: String
 ) {

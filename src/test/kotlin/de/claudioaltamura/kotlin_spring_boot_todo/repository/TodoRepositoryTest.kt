@@ -21,11 +21,6 @@ class TodoRepositoryTest : AbstractDatabaseIntegrationTest() {
 
   @Autowired lateinit var todoRepository: TodoRepository
 
-  @BeforeEach
-  fun setUp() {
-    todoRepository.findByTitle("special_todo").forEach { todoRepository.delete(it) }
-  }
-
   @ParameterizedTest
   @MethodSource("todos")
   fun findByTitleContaining(name: String, expectedSize: Int) {

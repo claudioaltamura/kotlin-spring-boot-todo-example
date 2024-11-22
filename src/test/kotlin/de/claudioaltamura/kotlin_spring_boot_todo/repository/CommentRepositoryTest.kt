@@ -1,31 +1,24 @@
 package de.claudioaltamura.kotlin_spring_boot_todo.repository
 
 import de.claudioaltamura.kotlin_spring_boot_todo.AbstractDatabaseIntegrationTest
-import de.claudioaltamura.kotlin_spring_boot_todo.entity.CommentEntity
-import de.claudioaltamura.kotlin_spring_boot_todo.entity.TodoEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import org.springframework.test.context.jdbc.Sql
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CommentRepositoryTest : AbstractDatabaseIntegrationTest() {
 
-  @Autowired lateinit var entityManager: TestEntityManager
-
   @Autowired lateinit var commentRepository: CommentRepository
 
   @Test
+  @Sql("/comment_find_by_id.sql")
   fun findByTodo() {
-    val todo = TodoEntity(null, "title", "this is a todo.")
-    entityManager.persist(todo)
-    val comment = CommentEntity(null, "comment", todo)
-    entityManager.persist(comment)
-
-    val comments = commentRepository.findByTodo(todo.id!!)
+    val todoId = 100L
+    val comments = commentRepository.findByTodo(todoId)
 
     assertThat(comments.size).isEqualTo(1)
   }
